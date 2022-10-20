@@ -30,6 +30,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AnimalType.h">
+    <ClInclude Include="AnimalInfoMatching.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
