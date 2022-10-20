@@ -9,5 +9,6 @@
     <ClInclude Include="Animal.h" />
     <ClInclude Include="AnimalType.h" />
     <ClInclude Include="AnimalInfoMatching.h" />
+    <ClInclude Include="AnimalValidator.h" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include "sqlite3.h"
 #include "Animal.h"
 #include "AnimalType.h"
+#include "AnimalValidator.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
@@ -119,40 +120,27 @@ std::string validateAnimalType(const Animal &animal)
     }
     if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Bird) + '0')
     {
-        return animalTypeToString(AnimalType::Bird);
+        char sexCustom = AnimalValidator::CustomAnimalValidation::validateAnimalSex(animal);
+        std::cout << sexCustom << " ";
+        std::string typeCustom = AnimalValidator::CustomAnimalValidation::validateAnimalType(animal);
+        std::cout << typeCustom << " ";
+        bool validBirthdateCustom = AnimalValidator::CustomAnimalValidation::isAnimalBirthdayValid(animal);
+        std::cout << validBirthdateCustom << "\n\n";
     }
     if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Fish) + '0')
     {
         return animalTypeToString(AnimalType::Fish);
     }
-}
-
-char validateAnimalSex(Animal& animal)
-{
-    char female = 'F';
-    char male = 'M';
-	if(animal.GetPersonalId()[1] == '0')
-	{
-        return male;
-	}
-    return female;
-}
-
-bool validateAnimalBirthday(Animal& animal)
-{
-    int noOf0s = 0;
-	for(int i=2;i<animal.GetPersonalId().size();++i)
-	{
-		if(animal.GetPersonalId()[i] == '0')
-		{
-            noOf0s++;
-		}
-	}
-    if(noOf0s == animal.GetPersonalId().size()-2)
     {
-        return false;
+        char sexRegex = AnimalValidator::RegexAnimalValidation::validateAnimalSex(animal);
+        std::cout << sexRegex << " ";
+        std::string typeRegex = AnimalValidator::RegexAnimalValidation::validateAnimalType(animal);
+        std::cout << typeRegex << " ";
+        bool validBirthdateRegex = AnimalValidator::RegexAnimalValidation::isAnimalBirthdayValid(animal);
+        std::cout << validBirthdateRegex << " ";
     }
-    return true;
+
+    return 0;
 }
 
 std::vector<Animal> randomGenerateAnimals(int noAnimals)
