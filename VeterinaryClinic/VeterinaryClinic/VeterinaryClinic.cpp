@@ -23,8 +23,28 @@ int main(int argc, const char* argv[]) {
     cout << "Stepping Table Statement" << endl;
     if (sqlite3_step(createStmt) != SQLITE_DONE) cout << "Didn't Create Table!" << endl;*/
 
-    string insertQuery = " ;";
-	sqlite3_stmt * insertStmt;
+    std::vector<Animal> animals = randomGenerateAnimals(10);
+    string insertQuery = "INSERT INTO animals(id,personal_id,name,registration_date) VALUES ";
+
+    size_t index = 0;
+    for (const auto& animal : animals)
+    {
+        insertQuery.append("(" + std::to_string(animal.GetId()) + ", '" + animal.GetPersonalId() + "', '" + animal.GetName() + "', '" + animal.GetRegistrationDate() + "')");
+        if(index < animals.size() - 1)
+        {
+            insertQuery.append(", ");
+        }
+        else
+        {
+            insertQuery.append("; ");
+        }
+        index++;
+    }
+
+    //std::cout << insertQuery.c_str();
+    //return 0;
+
+	sqlite3_stmt* insertStmt;
     cout << "Creating Insert Statement" << endl;
     sqlite3_prepare(db, insertQuery.c_str(), insertQuery.size(), &insertStmt, NULL);
     cout << "Stepping Insert Statement" << endl;
@@ -32,11 +52,8 @@ int main(int argc, const char* argv[]) {
 
     Animal animal(123, "5020200712", "Rudolf", "2022-10-19");
     std::string val = validateAnimalType(animal);
-    std::vector<Animal> animals = randomGenerateAnimals(10);
-    for(const auto& animal : animals)
-    {
-        std::cout << animal;
-    }
+    
+
     return 0;
 }
 
@@ -123,8 +140,8 @@ std::vector<Animal> randomGenerateAnimals(int noAnimals)
         }
         //generate each animal and put it into the vector
         //Animal animal(animalID, personalID, "Rudolf", "2022-10-19");
-        animalID++;
         animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+        animalID++;
     }
     return animals;
 }

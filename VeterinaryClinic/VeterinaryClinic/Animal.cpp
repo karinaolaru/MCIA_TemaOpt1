@@ -4,6 +4,11 @@ Animal::Animal(uint64_t id, std::string personalId, std::string name, std::strin
 {
 }
 
+uint64_t Animal::GetId() const
+{
+    return m_Id;
+}
+
 std::string Animal::GetPersonalId() const
 {
     return m_PersonalId;
