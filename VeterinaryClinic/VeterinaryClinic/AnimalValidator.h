@@ -8,25 +8,25 @@
 
 namespace AnimalValidator {
 	namespace CustomAnimalValidation {
-        std::string validateAnimalType(Animal& animal)
+        std::string validateAnimalType(const Animal& animal)
         {
-            if (animal.GetPersonalId()[0] == (char)AnimalType::HousePet + '0')
+            if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::HousePet) + '0')
             {
                 return animalTypeToString(AnimalType::HousePet);
             }
-            if (animal.GetPersonalId()[0] == (char)AnimalType::DomesticAnimal + '0')
+            if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::DomesticAnimal) + '0')
             {
                 return animalTypeToString(AnimalType::DomesticAnimal);
             }
-            if (animal.GetPersonalId()[0] == (char)AnimalType::ExoticAnimal + '0')
+            if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::ExoticAnimal) + '0')
             {
                 return animalTypeToString(AnimalType::ExoticAnimal);
             }
-            if (animal.GetPersonalId()[0] == (char)AnimalType::Bird + '0')
+            if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Bird) + '0')
             {
                 return animalTypeToString(AnimalType::Bird);
             }
-            if (animal.GetPersonalId()[0] == (char)AnimalType::Fish + '0')
+            if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Fish) + '0')
             {
                 return animalTypeToString(AnimalType::Fish);
             }
@@ -34,18 +34,16 @@ namespace AnimalValidator {
             return "";
         }
 
-        char validateAnimalSex(Animal& animal)
+        char validateAnimalSex(const Animal& animal)
         {
-            char female = 'F';
-            char male = 'M';
             if (std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::MALE)))
             {
-                return male;
+                return 'M';
             }
-            return female;
+            return 'F';
         }
 
-        bool isAnimalBirthdayValid(Animal& animal)
+        bool isAnimalBirthdayValid(const Animal& animal)
         {
             int noOf0s = 0;
             for (size_t i = 2; i < animal.GetPersonalId().size(); ++i)
@@ -55,7 +53,7 @@ namespace AnimalValidator {
                     noOf0s++;
                 }
             }
-            if (noOf0s == animal.GetPersonalId().size() - 2)
+            if (animal.GetPersonalId().size() < 2 || noOf0s == static_cast<int>(animal.GetPersonalId().size() - 2))
             {
                 return false;
             }
@@ -64,7 +62,7 @@ namespace AnimalValidator {
 	}
 
     namespace RegexAnimalValidation {
-        std::string validateAnimalType(Animal& animal)
+        std::string validateAnimalType(const Animal& animal)
         {
             if (std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::HOUSE_PET)))
             {
@@ -89,7 +87,7 @@ namespace AnimalValidator {
             return "Unknown";
         }
 
-        char validateAnimalSex(Animal& animal)
+        char validateAnimalSex(const Animal& animal)
         {
             char female = 'F';
             char male = 'M';
@@ -100,7 +98,7 @@ namespace AnimalValidator {
             return female;
         }
 
-        bool isAnimalBirthdayValid(Animal& animal)
+        bool isAnimalBirthdayValid(const Animal& animal)
         {
             return !std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::INVALID_BIRTHDATE));
         }

@@ -9,20 +9,17 @@
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
 std::vector<Animal> selectAnimals();
-std::string validateAnimalType(const Animal& animal);
-char validateAnimalSex(const Animal& animal);
-bool validateAnimalBirthday(const Animal& animal);
 std::vector<Animal> randomGenerateAnimals(int noAnimals);
 
 int main(int argc, const char* argv[])
 {
 	{
-		std::vector<Animal> animals = randomGenerateAnimals(10);
+		const std::vector<Animal> animals = randomGenerateAnimals(10);
 		insertAnimals(animals);
 	}
 
 	{
-		std::vector<Animal> animals = selectAnimals();
+		const std::vector<Animal> animals = selectAnimals();
 
         for (const auto& animal : animals)
         {
@@ -102,45 +99,6 @@ std::vector<Animal> selectAnimals()
 
     sqlite3_close_v2(db);
     return result;
-}
-
-std::string validateAnimalType(const Animal &animal)
-{
-	if(animal.GetPersonalId()[0] == static_cast<char>(AnimalType::HousePet) + '0')
-	{
-        return animalTypeToString(AnimalType::HousePet);
-	}
-    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::DomesticAnimal) + '0')
-    {
-        return animalTypeToString(AnimalType::DomesticAnimal);
-    }
-    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::ExoticAnimal) + '0')
-    {
-        return animalTypeToString(AnimalType::ExoticAnimal);
-    }
-    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Bird) + '0')
-    {
-        char sexCustom = AnimalValidator::CustomAnimalValidation::validateAnimalSex(animal);
-        std::cout << sexCustom << " ";
-        std::string typeCustom = AnimalValidator::CustomAnimalValidation::validateAnimalType(animal);
-        std::cout << typeCustom << " ";
-        bool validBirthdateCustom = AnimalValidator::CustomAnimalValidation::isAnimalBirthdayValid(animal);
-        std::cout << validBirthdateCustom << "\n\n";
-    }
-    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Fish) + '0')
-    {
-        return animalTypeToString(AnimalType::Fish);
-    }
-    {
-        char sexRegex = AnimalValidator::RegexAnimalValidation::validateAnimalSex(animal);
-        std::cout << sexRegex << " ";
-        std::string typeRegex = AnimalValidator::RegexAnimalValidation::validateAnimalType(animal);
-        std::cout << typeRegex << " ";
-        bool validBirthdateRegex = AnimalValidator::RegexAnimalValidation::isAnimalBirthdayValid(animal);
-        std::cout << validBirthdateRegex << " ";
-    }
-
-    return 0;
 }
 
 std::vector<Animal> randomGenerateAnimals(int noAnimals)

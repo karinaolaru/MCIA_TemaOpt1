@@ -21,23 +21,23 @@ std::string animalTypeToString(AnimalType type)
 
 AnimalType charToAnimalType(char c)
 {
-	if(c == (char)1 + '0')
+	if(c == 1 + '0')
 	{
 		return AnimalType::HousePet;
 	}
-	if (c == (char)2 + '0')
+	if (c == 2 + '0')
 	{
 		return AnimalType::DomesticAnimal;
 	}
-	if (c == (char)3 + '0')
+	if (c == 3 + '0')
 	{
 		return AnimalType::ExoticAnimal;
 	}
-	if (c == (char)4 + '0')
+	if (c == 4 + '0')
 	{
 		return AnimalType::Bird;
 	}
-	if (c == (char)5 + '0')
+	if (c == 5 + '0')
 	{
 		return AnimalType::Fish;
 	}
