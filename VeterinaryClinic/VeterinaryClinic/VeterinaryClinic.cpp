@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 using namespace std;
 #include "sqlite3.h"
 #include "Animal.h"
@@ -8,29 +9,34 @@ using namespace std;
 std::string validateAnimalType(Animal& animal);
 char validateAnimalSex(Animal& animal);
 bool validateAnimalBirthday(Animal& animal);
+std::vector<Animal> randomGenerateAnimals(int noAnimals);
 
 int main(int argc, const char* argv[]) {
 
-    /*sqlite3* db;
-    sqlite3_open("test1.db", &db);
+    sqlite3* db;
+    sqlite3_open("veterinary_clinic.db", &db);
 
-    string createQuery = "CREATE TABLE IF NOT EXISTS items (userid INTEGER PRIMARY KEY, ipaddr TEXT, username TEXT, useradd TEXT, userphone INTEGER, age INTEGER, time TEXT NOT NULL DEFAULT (NOW()));";
+    /*string createQuery = "CREATE TABLE IF NOT EXISTS items (userid INTEGER PRIMARY KEY, ipaddr TEXT, username TEXT, useradd TEXT, userphone INTEGER, age INTEGER, time TEXT NOT NULL DEFAULT (NOW()));";
         sqlite3_stmt * createStmt;
     cout << "Creating Table Statement" << endl;
     sqlite3_prepare(db, createQuery.c_str(), createQuery.size(), &createStmt, NULL);
     cout << "Stepping Table Statement" << endl;
-    if (sqlite3_step(createStmt) != SQLITE_DONE) cout << "Didn't Create Table!" << endl;
+    if (sqlite3_step(createStmt) != SQLITE_DONE) cout << "Didn't Create Table!" << endl;*/
 
-    string insertQuery = "INSERT INTO items (time, ipaddr,username,useradd,userphone,age) VALUES ('7:30', '192.187.27.55', 'vivekanand', 'kolkatta', '04456823948', 74); "; // WORKS!
+    string insertQuery = " ;";
 	sqlite3_stmt * insertStmt;
     cout << "Creating Insert Statement" << endl;
     sqlite3_prepare(db, insertQuery.c_str(), insertQuery.size(), &insertStmt, NULL);
     cout << "Stepping Insert Statement" << endl;
-    if (sqlite3_step(insertStmt) != SQLITE_DONE) cout << "Didn't Insert Item!" << endl;*/
+    if (sqlite3_step(insertStmt) != SQLITE_DONE) cout << "Didn't Insert Item!" << endl;
 
     Animal animal(123, "5020200712", "Rudolf", "2022-10-19");
     std::string val = validateAnimalType(animal);
-    std::cout << val;
+    std::vector<Animal> animals = randomGenerateAnimals(10);
+    for(const auto& animal : animals)
+    {
+        std::cout << animal;
+    }
     return 0;
 }
 
@@ -84,4 +90,41 @@ bool validateAnimalBirthday(Animal& animal)
         return false;
     }
     return true;
+}
+
+std::vector<Animal> randomGenerateAnimals(int noAnimals)
+{
+    srand(time(nullptr));
+    std::vector<Animal> animals;
+    animals.reserve(noAnimals);
+    int animalID = 1;
+    for(int i=0;i<noAnimals;++i)
+    { 
+		const int genAnimalType = 1 + (rand() % 5); //number from 1 to 5 for animal type
+        std::string personalID(std::to_string(genAnimalType));
+        const int genAnimalSex = rand() % 2; //values 0 or 1 for male or female
+        personalID.append(std::to_string(genAnimalSex));
+        const int genAnimalKnownBD = rand() % 2; //values 0 or 1 for unknown or known birthday
+        if(genAnimalKnownBD == 0)
+        {
+	        //we have an animal with an unknown birthday
+            for(int i=0;i<8;++i)
+            {
+                personalID.append(std::to_string(0));
+            }
+        }
+        else
+        {
+            //we have an animal with a birthday
+            for (int i = 0; i < 8; ++i)
+            {
+            	personalID.append(std::to_string(rand() % 10));
+            }
+        }
+        //generate each animal and put it into the vector
+        //Animal animal(animalID, personalID, "Rudolf", "2022-10-19");
+        animalID++;
+        animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+    }
+    return animals;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <string>
 
 class Animal{
@@ -7,6 +8,7 @@ public:
 	std::string GetPersonalId() const;
 	std::string GetName() const;
 	std::string GetRegistrationDate() const;
+	friend std::ostream& operator<<(std::ostream& os, const Animal& animal);
 
 protected:
 	uint64_t m_Id;
