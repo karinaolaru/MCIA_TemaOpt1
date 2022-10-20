@@ -1,6 +1,6 @@
 #include "Animal.h"
 
-Animal::Animal(std::string personalId, std::string name, std::string registrationDate) : m_PersonalId{ personalId }, m_Name{ name }, m_RegistrationDate{ registrationDate }
+Animal::Animal(uint64_t id, std::string personalId, std::string name, std::string registrationDate) :m_Id{ id }, m_PersonalId { personalId }, m_Name{ name }, m_RegistrationDate{ registrationDate }
 {
 }
 
