@@ -4,6 +4,11 @@ Animal::Animal(uint64_t id, std::string personalId, std::string name, std::strin
 {
 }
 
+uint64_t Animal::GetId() const
+{
+    return m_Id;
+}
+
 std::string Animal::GetPersonalId() const
 {
     return m_PersonalId;
@@ -17,4 +22,10 @@ std::string Animal::GetName() const
 std::string Animal::GetRegistrationDate() const
 {
     return m_RegistrationDate;
+}
+
+std::ostream& operator<<(std::ostream& os, const Animal& animal)
+{
+    os << animal.GetPersonalId() << " " << animal.GetName() << " " << animal.GetRegistrationDate() << "\n";
+    return os;
 }

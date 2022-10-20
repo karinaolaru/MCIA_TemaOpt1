@@ -16,3 +16,27 @@ std::string animalTypeToString(AnimalType type)
 		return "Fish";
 	}
 }
+
+AnimalType charToAnimalType(char c)
+{
+	if(c == (char)1 + '0')
+	{
+		return AnimalType::HousePet;
+	}
+	if (c == (char)2 + '0')
+	{
+		return AnimalType::DomesticAnimal;
+	}
+	if (c == (char)3 + '0')
+	{
+		return AnimalType::ExoticAnimal;
+	}
+	if (c == (char)4 + '0')
+	{
+		return AnimalType::Bird;
+	}
+	if (c == (char)5 + '0')
+	{
+		return AnimalType::Fish;
+	}
+}
