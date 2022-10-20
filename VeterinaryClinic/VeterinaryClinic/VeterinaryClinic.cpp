@@ -1,36 +1,52 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
-using namespace std;
 #include "sqlite3.h"
 #include "Animal.h"
 #include "AnimalType.h"
 
-std::string validateAnimalType(Animal& animal);
-char validateAnimalSex(Animal& animal);
-bool validateAnimalBirthday(Animal& animal);
+void insertAnimals(const std::vector<Animal>& animals);
+void deleteAnimals();
+std::vector<Animal> selectAnimals();
+std::string validateAnimalType(const Animal& animal);
+char validateAnimalSex(const Animal& animal);
+bool validateAnimalBirthday(const Animal& animal);
 std::vector<Animal> randomGenerateAnimals(int noAnimals);
 
-int main(int argc, const char* argv[]) {
+int main(int argc, const char* argv[])
+{
+	{
+		std::vector<Animal> animals = randomGenerateAnimals(10);
+		insertAnimals(animals);
+	}
 
+	{
+		std::vector<Animal> animals = selectAnimals();
+
+        for (const auto& animal : animals)
+        {
+            std::cout << animal;
+        }
+	}
+
+	{
+		deleteAnimals();
+	}
+    return 0;
+}
+
+void insertAnimals(const std::vector<Animal>& animals)
+{
     sqlite3* db;
     sqlite3_open("veterinary_clinic.db", &db);
-
-    /*string createQuery = "CREATE TABLE IF NOT EXISTS items (userid INTEGER PRIMARY KEY, ipaddr TEXT, username TEXT, useradd TEXT, userphone INTEGER, age INTEGER, time TEXT NOT NULL DEFAULT (NOW()));";
-        sqlite3_stmt * createStmt;
-    cout << "Creating Table Statement" << endl;
-    sqlite3_prepare(db, createQuery.c_str(), createQuery.size(), &createStmt, NULL);
-    cout << "Stepping Table Statement" << endl;
-    if (sqlite3_step(createStmt) != SQLITE_DONE) cout << "Didn't Create Table!" << endl;*/
-
-    std::vector<Animal> animals = randomGenerateAnimals(10);
-    string insertQuery = "INSERT INTO animals(id,personal_id,name,registration_date) VALUES ";
+    
+    std::string insertQuery = "INSERT INTO animals(id,personal_id,name,registration_date) VALUES ";
 
     size_t index = 0;
     for (const auto& animal : animals)
     {
         insertQuery.append("(" + std::to_string(animal.GetId()) + ", '" + animal.GetPersonalId() + "', '" + animal.GetName() + "', '" + animal.GetRegistrationDate() + "')");
-        if(index < animals.size() - 1)
+        if (index < animals.size() - 1)
         {
             insertQuery.append(", ");
         }
@@ -40,42 +56,72 @@ int main(int argc, const char* argv[]) {
         }
         index++;
     }
-
-    //std::cout << insertQuery.c_str();
-    //return 0;
-
-	sqlite3_stmt* insertStmt;
-    cout << "Creating Insert Statement" << endl;
-    sqlite3_prepare(db, insertQuery.c_str(), insertQuery.size(), &insertStmt, NULL);
-    cout << "Stepping Insert Statement" << endl;
-    if (sqlite3_step(insertStmt) != SQLITE_DONE) cout << "Didn't Insert Item!" << endl;
-
-    Animal animal(123, "5020200712", "Rudolf", "2022-10-19");
-    std::string val = validateAnimalType(animal);
     
+    sqlite3_stmt* insertStmt;
+    std::cout << "Creating Insert Statement" << std::endl;
+    sqlite3_prepare(db, insertQuery.c_str(), insertQuery.size(), &insertStmt, NULL);
+    std::cout << "Stepping Insert Statement" << std::endl;
+    if (sqlite3_step(insertStmt) != SQLITE_DONE) std::cout << "Didn't Insert Item!" << std::endl;
 
-    return 0;
+    sqlite3_finalize(insertStmt);
+    sqlite3_close_v2(db);
 }
 
-std::string validateAnimalType(Animal &animal)
+void deleteAnimals()
 {
-	if(animal.GetPersonalId()[0] == (char)AnimalType::HousePet + '0')
+    sqlite3* db;
+    sqlite3_open("veterinary_clinic.db", &db);
+
+    const std::string deleteQuery = "DELETE FROM animals;";
+    sqlite3_stmt* deleteStmt;
+    std::cout << "Creating Delete Statement" << std::endl;
+    sqlite3_prepare(db, deleteQuery.c_str(), static_cast<int>(deleteQuery.size()), &deleteStmt, nullptr);
+    std::cout << "Stepping Delete Statement" << std::endl;
+    if (sqlite3_step(deleteStmt) != SQLITE_DONE) std::cout << "Didn't Delete Item!" << std::endl;
+
+    sqlite3_finalize(deleteStmt);
+    sqlite3_close_v2(db);
+}
+
+std::vector<Animal> selectAnimals()
+{
+    sqlite3* db;
+    sqlite3_open("veterinary_clinic.db", &db);
+    const std::string selectQuery = "SELECT * FROM animals;";
+    std::vector<Animal> result;
+
+    sqlite3_exec(db, selectQuery.c_str(), [](void* result, int argc, char** argv, char** azColName)
+    {
+        uint32_t id;
+        memcpy(&id, argv[0], 4);
+    	std::vector<Animal>& res = *static_cast<std::vector<Animal>*>(result);
+    	res.emplace_back(id, argv[1], argv[2], argv[3]);
+        return 0;
+    }, &result, nullptr);
+
+    sqlite3_close_v2(db);
+    return result;
+}
+
+std::string validateAnimalType(const Animal &animal)
+{
+	if(animal.GetPersonalId()[0] == static_cast<char>(AnimalType::HousePet) + '0')
 	{
         return animalTypeToString(AnimalType::HousePet);
 	}
-    if (animal.GetPersonalId()[0] == (char)AnimalType::DomesticAnimal + '0')
+    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::DomesticAnimal) + '0')
     {
         return animalTypeToString(AnimalType::DomesticAnimal);
     }
-    if (animal.GetPersonalId()[0] == (char)AnimalType::ExoticAnimal + '0')
+    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::ExoticAnimal) + '0')
     {
         return animalTypeToString(AnimalType::ExoticAnimal);
     }
-    if (animal.GetPersonalId()[0] == (char)AnimalType::Bird + '0')
+    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Bird) + '0')
     {
         return animalTypeToString(AnimalType::Bird);
     }
-    if (animal.GetPersonalId()[0] == (char)AnimalType::Fish + '0')
+    if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::Fish) + '0')
     {
         return animalTypeToString(AnimalType::Fish);
     }
@@ -125,7 +171,7 @@ std::vector<Animal> randomGenerateAnimals(int noAnimals)
         if(genAnimalKnownBD == 0)
         {
 	        //we have an animal with an unknown birthday
-            for(int i=0;i<8;++i)
+            for(int i = 0; i < 8; ++i)
             {
                 personalID.append(std::to_string(0));
             }
