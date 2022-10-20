@@ -1,14 +1,12 @@
 #pragma once
 
-#include <string>
-
-namespace AnimalInfoMatch {
-	const std::string MALE = "0[0-9]{9}";
-	const std::string FEMALE = "1[0-9]{9}";
-	const std::string HOUSE_PET = "[0-1]1[0-9]{8}";
-	const std::string DOMESTIC = "[0-1]2[0-9]{8}";
-	const std::string EXOTIC = "[0-1]3[0-9]{8}";
-	const std::string BIRD = "[0-1]4[0-9]{8}";
-	const std::string FIHS = "[0-1]5[0-9]{8}";
-	const std::string INVALID_BIRTHDATE = "[0-1][1-5]00000000";
+namespace AnimalInfoRegex {
+	const char* MALE = "[0-9]0{8}";
+	const char* FEMALE = "[0-9]1{8}";
+	const char* HOUSE_PET = "1[0-1][0-9]{8}";
+	const char* DOMESTIC = "2[0-1][0-9]{8}";
+	const char* EXOTIC = "3[0-1][0-9]{8}";
+	const char* BIRD = "4[0-1][0-9]{8}";
+	const char* FISH = "5[0-1][0-9]{8}";
+	const char* INVALID_BIRTHDATE = "[0-1][1-5]00000000";
 }
