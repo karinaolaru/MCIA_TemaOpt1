@@ -24,6 +24,11 @@ std::string Animal::GetRegistrationDate() const
     return m_RegistrationDate;
 }
 
+AnimalType Animal::GetAnimalType() const
+{
+    return charToAnimalType(m_PersonalId[0]);
+}
+
 std::ostream& operator<<(std::ostream& os, const Animal& animal)
 {
     os << animal.GetPersonalId() << " " << animal.GetName() << " " << animal.GetRegistrationDate() << "\n";
