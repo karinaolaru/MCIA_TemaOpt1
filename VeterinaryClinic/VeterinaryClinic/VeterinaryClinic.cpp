@@ -1,15 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <ctime>
 #include "sqlite3.h"
 #include "Animal.h"
 #include "AnimalType.h"
 #include "AnimalValidator.h"
+#include "Instrumentor.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
 std::vector<Animal> selectAnimals();
 std::vector<Animal> randomGenerateAnimals(int noAnimals);
+std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal>& animals);
+std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals);
+void analyzeAnimalSexCustom(const std::vector<Animal>& animals);
+void analyzeAnimalSexRegex(const std::vector<Animal>& animals);
+void analyzeAnimalBirthdayCustom(const std::vector<Animal>& animals);
+void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals);
+void benchmarkGroupAnimals(const std::vector<Animal>& animals);
 
 int main(int argc, const char* argv[])
 {
@@ -19,18 +28,137 @@ int main(int argc, const char* argv[])
 	}
 
 	{
+        Instrumentor::Get().BeginSession("Profiling");
 		const std::vector<Animal> animals = selectAnimals();
-
-        for (const auto& animal : animals)
-        {
-            std::cout << animal;
-        }
+        groupAnimalsCustom(animals);
+        groupAnimalsRegex(animals);
+        analyzeAnimalBirthdayCustom(animals);
+        analyzeAnimalBirthdayRegex(animals);
+        analyzeAnimalSexCustom(animals);
+        analyzeAnimalSexRegex(animals);
+        Instrumentor::Get().EndSession();
 	}
 
 	{
 		deleteAnimals();
 	}
     return 0;
+}
+
+std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal> &animals)
+{
+    PROFILE_FUNCTION();
+	std::unordered_map<std::string, std::vector<Animal>> statistics;
+
+    for (const auto& animal : animals)
+    {
+        statistics[AnimalValidator::CustomAnimalValidation::findAnimalType(animal)].emplace_back(animal);
+    }
+
+    return statistics;
+}
+
+std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals)
+{
+    PROFILE_FUNCTION();
+    std::unordered_map<std::string, std::vector<Animal>> statistics;
+
+    for (const auto& animal : animals)
+    {
+        statistics[AnimalValidator::RegexAnimalValidation::findAnimalType(animal)].emplace_back(animal);
+    }
+
+    return statistics;
+}
+
+/*void benchmarkGroupAnimals(const std::vector<Animal>& animals)
+{
+    PROFILE_FUNCTION();
+    std::thread regexThread([&]() { groupAnimalsRegex(animals); });
+    std::thread customThread([&]() { groupAnimalsCustom(animals); });
+
+    regexThread.join();
+    customThread.join();
+}*/
+
+void analyzeAnimalSexCustom(const std::vector<Animal> &animals)
+{
+    PROFILE_FUNCTION();
+	int male = 0;
+    int female = 0;
+	for(const auto& animal : animals)
+	{
+		if(AnimalValidator::CustomAnimalValidation::validateAnimalSex(animal) == 'F')
+		{
+            female++;
+		}
+        else
+        {
+            male++;
+        }
+	}
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << " females is: " << female << "\n";
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << " males is: " << male << "\n";
+}
+
+void analyzeAnimalSexRegex(const std::vector<Animal>& animals)
+{
+    PROFILE_FUNCTION();
+	int male = 0;
+    int female = 0;
+    for (const auto& animal : animals)
+    {
+        if (AnimalValidator::RegexAnimalValidation::validateAnimalSex(animal) == 'F')
+        {
+            female++;
+        }
+        else
+        {
+            male++;
+        }
+    }
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s females is: " << female << "\n";
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s males is: " << male << "\n";
+}
+
+void analyzeAnimalBirthdayCustom(const std::vector<Animal>& animals)
+{
+    PROFILE_FUNCTION();
+	int known = 0;
+    int unknown = 0;
+    for (const auto& animal : animals)
+    {
+        if (AnimalValidator::CustomAnimalValidation::isAnimalBirthdayValid(animal) == true)
+        {
+            known++;
+        }
+        else
+        {
+            unknown++;
+        }
+    }
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s with known birthdays is: " << known << "\n";
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s with unknown birthdays is: " << unknown << "\n";
+}
+
+void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals)
+{
+    PROFILE_FUNCTION();
+	int known = 0;
+    int unknown = 0;
+    for (const auto& animal : animals)
+    {
+        if (AnimalValidator::RegexAnimalValidation::isAnimalBirthdayValid(animal) == true)
+        {
+            known++;
+        }
+        else
+        {
+            unknown++;
+        }
+    }
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s with known birthdays is: " << known << "\n";
+    std::cout << "The number of " << animalTypeToString(animals[0].GetAnimalType()) << "s with unknown birthdays is: " << unknown << "\n";
 }
 
 void insertAnimals(const std::vector<Animal>& animals)
@@ -83,6 +211,8 @@ void deleteAnimals()
 
 std::vector<Animal> selectAnimals()
 {
+    PROFILE_FUNCTION();
+
     sqlite3* db;
     sqlite3_open("veterinary_clinic.db", &db);
     const std::string selectQuery = "SELECT * FROM animals;";

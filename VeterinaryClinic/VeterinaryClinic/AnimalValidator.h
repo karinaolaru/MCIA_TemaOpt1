@@ -8,7 +8,7 @@
 
 namespace AnimalValidator {
 	namespace CustomAnimalValidation {
-        std::string validateAnimalType(const Animal& animal)
+        std::string findAnimalType(const Animal& animal)
         {
             if (animal.GetPersonalId()[0] == static_cast<char>(AnimalType::HousePet) + '0')
             {
@@ -36,11 +36,13 @@ namespace AnimalValidator {
 
         char validateAnimalSex(const Animal& animal)
         {
-            if (std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::MALE)))
+            char female = 'F';
+            char male = 'M';
+            if (animal.GetPersonalId()[1] == '0')
             {
-                return 'M';
+                return male;
             }
-            return 'F';
+            return female;
         }
 
         bool isAnimalBirthdayValid(const Animal& animal)
@@ -62,7 +64,7 @@ namespace AnimalValidator {
 	}
 
     namespace RegexAnimalValidation {
-        std::string validateAnimalType(const Animal& animal)
+        std::string findAnimalType(const Animal& animal)
         {
             if (std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::HOUSE_PET)))
             {
@@ -89,13 +91,11 @@ namespace AnimalValidator {
 
         char validateAnimalSex(const Animal& animal)
         {
-            char female = 'F';
-            char male = 'M';
-            if (animal.GetPersonalId()[1] == '0')
+            if (std::regex_match(animal.GetPersonalId(), std::regex(AnimalInfoRegex::MALE)))
             {
-                return male;
+                return 'M';
             }
-            return female;
+            return 'F';
         }
 
         bool isAnimalBirthdayValid(const Animal& animal)
