@@ -24,7 +24,7 @@
 #define Profiling 1
 #if Profiling
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
-#define PROFILE_FUNCTION() PROFILE_SCOPE(__FUNCSIG__)
+#define PROFILE_FUNCTION() PROFILE_SCOPE(__func__)
 #else
 #define PROFILE_SCOPE(name)
 #define PROFILE_FUNCTION()

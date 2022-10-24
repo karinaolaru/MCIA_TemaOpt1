@@ -23,7 +23,7 @@ void benchmarkGroupAnimals(const std::vector<Animal>& animals);
 int main(int argc, const char* argv[])
 {
 	{
-		const std::vector<Animal> animals = randomGenerateAnimals(10);
+		const std::vector<Animal> animals = randomGenerateAnimals(40000);
 		insertAnimals(animals);
 	}
 
@@ -50,9 +50,9 @@ std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const st
     PROFILE_FUNCTION();
 	std::unordered_map<std::string, std::vector<Animal>> statistics;
 
-    for (const auto& animal : animals)
+    for (size_t i=0;i<animals.size();++i)
     {
-        statistics[AnimalValidator::CustomAnimalValidation::findAnimalType(animal)].emplace_back(animal);
+        statistics[AnimalValidator::CustomAnimalValidation::findAnimalType(animals[i])].emplace_back(animals[i]);
     }
 
     return statistics;
@@ -63,9 +63,9 @@ std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std
     PROFILE_FUNCTION();
     std::unordered_map<std::string, std::vector<Animal>> statistics;
 
-    for (const auto& animal : animals)
+    for (size_t i = 0; i < animals.size(); ++i)
     {
-        statistics[AnimalValidator::RegexAnimalValidation::findAnimalType(animal)].emplace_back(animal);
+        statistics[AnimalValidator::RegexAnimalValidation::findAnimalType(animals[i])].emplace_back(animals[i]);
     }
 
     return statistics;
@@ -86,9 +86,9 @@ void analyzeAnimalSexCustom(const std::vector<Animal> &animals)
     PROFILE_FUNCTION();
 	int male = 0;
     int female = 0;
-	for(const auto& animal : animals)
+	for(size_t i = 0; i < animals.size(); ++i)
 	{
-		if(AnimalValidator::CustomAnimalValidation::validateAnimalSex(animal) == 'F')
+		if(AnimalValidator::CustomAnimalValidation::validateAnimalSex(animals[i]) == 'F')
 		{
             female++;
 		}
@@ -106,9 +106,9 @@ void analyzeAnimalSexRegex(const std::vector<Animal>& animals)
     PROFILE_FUNCTION();
 	int male = 0;
     int female = 0;
-    for (const auto& animal : animals)
+    for (size_t i = 0; i < animals.size(); ++i)
     {
-        if (AnimalValidator::RegexAnimalValidation::validateAnimalSex(animal) == 'F')
+        if (AnimalValidator::RegexAnimalValidation::validateAnimalSex(animals[i]) == 'F')
         {
             female++;
         }
@@ -126,9 +126,9 @@ void analyzeAnimalBirthdayCustom(const std::vector<Animal>& animals)
     PROFILE_FUNCTION();
 	int known = 0;
     int unknown = 0;
-    for (const auto& animal : animals)
+    for (size_t i = 0; i < animals.size(); ++i)
     {
-        if (AnimalValidator::CustomAnimalValidation::isAnimalBirthdayValid(animal) == true)
+        if (AnimalValidator::CustomAnimalValidation::isAnimalBirthdayValid(animals[i]) == true)
         {
             known++;
         }
@@ -146,9 +146,9 @@ void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals)
     PROFILE_FUNCTION();
 	int known = 0;
     int unknown = 0;
-    for (const auto& animal : animals)
+    for (size_t i = 0; i < animals.size(); ++i)
     {
-        if (AnimalValidator::RegexAnimalValidation::isAnimalBirthdayValid(animal) == true)
+        if (AnimalValidator::RegexAnimalValidation::isAnimalBirthdayValid(animals[i]) == true)
         {
             known++;
         }
