@@ -24,7 +24,7 @@ std::string Animal::GetRegistrationDate() const
     return m_RegistrationDate;
 }
 
-bool Animal::operator<(const Animal& other)
+bool Animal::operator<(const Animal& other) const
 {
     return this->m_PersonalId < other.m_PersonalId;
 }
