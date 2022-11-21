@@ -24,6 +24,11 @@ std::string Animal::GetRegistrationDate() const
     return m_RegistrationDate;
 }
 
+bool Animal::operator<(const Animal& other)
+{
+    return this->m_PersonalId < other.m_PersonalId;
+}
+
 std::ostream& operator<<(std::ostream& os, const Animal& animal)
 {
     os << animal.GetPersonalId() << " " << animal.GetName() << " " << animal.GetRegistrationDate() << "\n";

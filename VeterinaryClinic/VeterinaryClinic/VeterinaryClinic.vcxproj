@@ -148,6 +148,7 @@
     <ClInclude Include="AnimalType.h" />
     <ClInclude Include="AnimalInfoMatching.h" />
     <ClInclude Include="AnimalValidator.h" />
+    <ClInclude Include="QuickSort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
