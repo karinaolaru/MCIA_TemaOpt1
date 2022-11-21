@@ -10,7 +10,6 @@
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
-std::vector<Animal> selectAnimals();
 std::vector<Animal> randomGenerateAnimals(int noAnimals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal>& animals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals);
@@ -207,28 +206,6 @@ void deleteAnimals()
 
     sqlite3_finalize(deleteStmt);
     sqlite3_close_v2(db);
-}
-
-std::vector<Animal> selectAnimals()
-{
-    PROFILE_FUNCTION();
-
-    sqlite3* db;
-    sqlite3_open("veterinary_clinic.db", &db);
-    const std::string selectQuery = "SELECT * FROM animals;";
-    std::vector<Animal> result;
-
-    sqlite3_exec(db, selectQuery.c_str(), [](void* result, int argc, char** argv, char** azColName)
-    {
-        uint32_t id;
-        memcpy(&id, argv[0], 4);
-    	std::vector<Animal>& res = *static_cast<std::vector<Animal>*>(result);
-    	res.emplace_back(id, argv[1], argv[2], argv[3]);
-        return 0;
-    }, &result, nullptr);
-
-    sqlite3_close_v2(db);
-    return result;
 }
 
 std::vector<Animal> randomGenerateAnimals(int noAnimals)
