@@ -1,17 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <ctime>
 #include "sqlite3.h"
 #include "Animal.h"
 #include "AnimalType.h"
 #include "AnimalValidator.h"
 #include "Instrumentor.h"
 #include "Select.h"
+#include "Generate.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
-std::vector<Animal> randomGenerateAnimals(int noAnimals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal>& animals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals);
 void analyzeAnimalSexCustom(const std::vector<Animal>& animals);
@@ -22,7 +21,7 @@ void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals);
 int main(int argc, const char* argv[])
 {
 	{
-		const std::vector<Animal> animals = randomGenerateAnimals(40000);
+		const std::vector<Animal> animals = Generate::randomGenerateAnimals(40000);
 		insertAnimals(animals);
 	}
 
@@ -206,41 +205,4 @@ void deleteAnimals()
 
     sqlite3_finalize(deleteStmt);
     sqlite3_close_v2(db);
-}
-
-std::vector<Animal> randomGenerateAnimals(int noAnimals)
-{
-    srand(time(nullptr));
-    std::vector<Animal> animals;
-    animals.reserve(noAnimals);
-    int animalID = 1;
-    for(int i=0;i<noAnimals;++i)
-    { 
-		const int genAnimalType = 1 + (rand() % 5); //number from 1 to 5 for animal type
-        std::string personalID(std::to_string(genAnimalType));
-        const int genAnimalSex = rand() % 2; //values 0 or 1 for male or female
-        personalID.append(std::to_string(genAnimalSex));
-        const int genAnimalKnownBD = rand() % 2; //values 0 or 1 for unknown or known birthday
-        if(genAnimalKnownBD == 0)
-        {
-	        //we have an animal with an unknown birthday
-            for(int i = 0; i < 8; ++i)
-            {
-                personalID.append(std::to_string(0));
-            }
-        }
-        else
-        {
-            //we have an animal with a birthday
-            for (int i = 0; i < 8; ++i)
-            {
-            	personalID.append(std::to_string(rand() % 10));
-            }
-        }
-        //generate each animal and put it into the vector
-        //Animal animal(animalID, personalID, "Rudolf", "2022-10-19");
-        animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
-        animalID++;
-    }
-    return animals;
 }

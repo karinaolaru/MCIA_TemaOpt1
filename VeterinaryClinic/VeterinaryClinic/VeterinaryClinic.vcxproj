@@ -153,7 +153,9 @@
     <ClInclude Include="AnimalInfoMatching.h" />
     <ClInclude Include="AnimalValidator.h" />
     <ClInclude Include="BinarySearch.h" />
+    <ClInclude Include="Generate.h" />
     <ClInclude Include="Instrumentor.h" />
+    <ClInclude Include="QuickSort.h" />
     <ClInclude Include="Select.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

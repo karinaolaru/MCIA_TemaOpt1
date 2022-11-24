@@ -12,6 +12,7 @@ public:
 	std::string GetRegistrationDate() const;
 	AnimalType GetAnimalType() const;
 	friend std::ostream& operator<<(std::ostream& os, const Animal& animal);
+	bool operator<(const Animal& other) const;
 
 protected:
 	uint64_t m_Id;

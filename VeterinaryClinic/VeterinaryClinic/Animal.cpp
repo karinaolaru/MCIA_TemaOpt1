@@ -19,14 +19,19 @@ std::string Animal::GetName() const
     return m_Name;
 }
 
+AnimalType Animal::GetAnimalType() const
+{
+    return charToAnimalType(m_PersonalId[0]);
+}
+
 std::string Animal::GetRegistrationDate() const
 {
     return m_RegistrationDate;
 }
 
-AnimalType Animal::GetAnimalType() const
+bool Animal::operator<(const Animal& other) const
 {
-    return charToAnimalType(m_PersonalId[0]);
+    return this->m_PersonalId < other.m_PersonalId;
 }
 
 std::ostream& operator<<(std::ostream& os, const Animal& animal)
