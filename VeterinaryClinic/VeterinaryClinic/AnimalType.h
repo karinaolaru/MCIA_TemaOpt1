@@ -13,3 +13,4 @@ enum class AnimalType : uint8_t
 
 std::string animalTypeToString(AnimalType type);
 AnimalType charToAnimalType(char c);
+int animalTypeToInt(const AnimalType& animalType);

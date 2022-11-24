@@ -42,3 +42,16 @@ AnimalType charToAnimalType(char c)
 		return AnimalType::Fish;
 	}
 }
+
+int animalTypeToInt(const AnimalType& animalType)
+{
+	switch (animalType)
+	{
+	case AnimalType::HousePet: return 1;
+	case AnimalType::DomesticAnimal: return 2;
+	case AnimalType::ExoticAnimal: return 3;
+	case AnimalType::Bird: return 4;
+	case AnimalType::Fish: return 5;
+	default: return 6;
+	}
+}
