@@ -19,6 +19,11 @@ std::string Animal::GetName() const
     return m_Name;
 }
 
+AnimalType Animal::GetAnimalType() const
+{
+    return charToAnimalType(m_PersonalId[0]);
+}
+
 std::string Animal::GetRegistrationDate() const
 {
     return m_RegistrationDate;

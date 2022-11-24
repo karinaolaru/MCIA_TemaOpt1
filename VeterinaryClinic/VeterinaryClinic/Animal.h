@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "AnimalType.h"
 
 class Animal{
 public:
@@ -9,6 +10,7 @@ public:
 	std::string GetPersonalId() const;
 	std::string GetName() const;
 	std::string GetRegistrationDate() const;
+	AnimalType GetAnimalType() const;
 	friend std::ostream& operator<<(std::ostream& os, const Animal& animal);
 	bool operator<(const Animal& other) const;
 

@@ -1,0 +1,1 @@
+{"otherData": {},"traceEvents":[{"cat":"function","dur":1237544,"name":"selectAnimals","ph":"X","pid":0,"tid":3317927481,"ts":585030889093},{"cat":"function","dur":1127478,"name":"groupAnimalsCustom","ph":"X","pid":0,"tid":3317927481,"ts":585032138758}
