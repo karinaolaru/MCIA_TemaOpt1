@@ -1,17 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <ctime>
 #include "sqlite3.h"
 #include "Animal.h"
 #include "AnimalType.h"
 #include "AnimalValidator.h"
 #include "Instrumentor.h"
 #include "Select.h"
+#include "Generate.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
-std::vector<Animal> randomGenerateAnimals(int noAnimals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal>& animals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals);
 void analyzeAnimalSexCustom(const std::vector<Animal>& animals);
@@ -22,7 +21,7 @@ void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals);
 int main(int argc, const char* argv[])
 {
 	{
-		const std::vector<Animal> animals = randomGenerateAnimals(40000);
+		const std::vector<Animal> animals = Generate::randomGenerateAnimals(40000);
 		insertAnimals(animals);
 	}
 

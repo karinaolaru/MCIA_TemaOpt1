@@ -88,5 +88,6 @@ namespace Generate
     std::vector<Animal> shuffleAnimals(std::vector<Animal>& animals)
     {
         std::ranges::shuffle(animals, std::mt19937{ std::random_device{}() });
+        return animals;
     }
 }
