@@ -4,7 +4,7 @@
 
 #include "Animal.h"
 #include "Instrumentor.h"
-#include "AnimalType.cpp"
+#include "AnimalType.h"
 
 namespace Select
 {

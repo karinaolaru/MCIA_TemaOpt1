@@ -7,6 +7,7 @@
 #include "AnimalType.h"
 #include "AnimalValidator.h"
 #include "Instrumentor.h"
+#include "Select.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
@@ -17,7 +18,6 @@ void analyzeAnimalSexCustom(const std::vector<Animal>& animals);
 void analyzeAnimalSexRegex(const std::vector<Animal>& animals);
 void analyzeAnimalBirthdayCustom(const std::vector<Animal>& animals);
 void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals);
-void benchmarkGroupAnimals(const std::vector<Animal>& animals);
 
 int main(int argc, const char* argv[])
 {
@@ -28,7 +28,7 @@ int main(int argc, const char* argv[])
 
 	{
         Instrumentor::Get().BeginSession("Profiling");
-		const std::vector<Animal> animals = selectAnimals();
+		const std::vector<Animal> animals = Select::selectAnimals();
         groupAnimalsCustom(animals);
         groupAnimalsRegex(animals);
         analyzeAnimalBirthdayCustom(animals);
