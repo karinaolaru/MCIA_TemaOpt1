@@ -7,6 +7,10 @@ class Animal{
 public:
 	Animal() = default;
 	Animal(uint64_t id,std::string personalId, std::string name, std::string registrationDate);
+	Animal(const Animal& other);
+	Animal(Animal&& other);
+	Animal& operator=(const Animal& other);
+	Animal& operator=(Animal&& other);
 	uint64_t GetId() const;
 	std::string GetPersonalId() const;
 	std::string GetName() const;

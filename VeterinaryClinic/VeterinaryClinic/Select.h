@@ -37,7 +37,7 @@ namespace Select
 	            uint32_t id;
 			    memcpy(&id, argv[0], 4);
 				auto& [res, index] = *static_cast<Array*>(arr);
-			    res[index++] = Animal(id, argv[1], argv[2], argv[3]);
+				res[index++] = Animal(id, argv[1], argv[2], argv[3]);
 			    return 0;
 	        }, &arr, nullptr);
 
