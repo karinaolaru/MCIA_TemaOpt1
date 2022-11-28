@@ -12,8 +12,10 @@ namespace Generate
         srand(time(nullptr));
         std::vector<Animal> animals;
         animals.reserve(noAnimals);
+        std::set<Animal> animalsSet;
         int animalID = 1;
-        for (int i = 0; i < noAnimals; ++i)
+        int lastSize = 0;
+        while (animalsSet.size() < noAnimals)
         {
             const int genAnimalType = 1 + (rand() % 5); //number from 1 to 5 for animal type
             std::string personalID(std::to_string(genAnimalType));
@@ -38,7 +40,12 @@ namespace Generate
             }
             //generate each animal and put it into the vector
             //Animal animal(animalID, personalID, "Rudolf", "2022-10-19");
-            animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+            animalsSet.emplace(animalID, personalID, "Rudolf", "2022-10-19");
+            if(animalsSet.size() != lastSize)
+            {
+                lastSize = animalsSet.size();
+                animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+            }
             animalID++;
         }
         return animals;
@@ -50,8 +57,10 @@ namespace Generate
         
         std::vector<Animal> animals;
         animals.reserve(noAnimals);
+        std::set<Animal> animalsSet;
         int animalID = 1;
-        for (int i = 0; i < noAnimals; ++i)
+        int lastSize = 0;
+        while (animalsSet.size() < noAnimals)
         {
             std::uniform_int_distribution<int> distributeType(1, 5);
         	const int genAnimalType = distributeType(generator); //number from 1 to 5 for animal type
@@ -79,7 +88,12 @@ namespace Generate
             }
             //generate each animal and put it into the vector
             //Animal animal(animalID, personalID, "Rudolf", "2022-10-19");
-            animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+            animalsSet.emplace(animalID, personalID, "Rudolf", "2022-10-19");
+            if(animalsSet.size() != lastSize)
+            {
+                lastSize = animalsSet.size();
+                animals.emplace_back(animalID, personalID, "Rudolf", "2022-10-19");
+            }
             animalID++;
         }
         return animals;

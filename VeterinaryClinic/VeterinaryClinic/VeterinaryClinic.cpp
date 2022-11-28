@@ -17,23 +17,31 @@ void analyzeAnimalSexCustom(const std::vector<Animal>& animals);
 void analyzeAnimalSexRegex(const std::vector<Animal>& animals);
 void analyzeAnimalBirthdayCustom(const std::vector<Animal>& animals);
 void analyzeAnimalBirthdayRegex(const std::vector<Animal>& animals);
+void findAnimalInSet(const std::set<Animal>& animals, const Animal& animal);
 
 int main(int argc, const char* argv[])
 {
 	{
-		const std::vector<Animal> animals = Generate::randomGenerateAnimals(40000);
-		insertAnimals(animals);
-	}
+		const std::vector<Animal> animalsVect = Generate::randomGenerateAnimals(40000);
+		insertAnimals(animalsVect);
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> randAnimal(1, animalsVect.size()-1);
+        Animal animal = animalsVect[randAnimal(generator)];
 
-	{
         Instrumentor::Get().BeginSession("Profiling");
-		const std::vector<Animal> animals = Select::selectAnimals();
-        groupAnimalsCustom(animals);
+		const std::set<Animal> animals = Select::selectAnimals();
+		const std::set<Animal> animalsByGroup = Select::selectAllAnimalsByGroups();
+
+        findAnimalInSet(animals, animal);
+
+		//std::cout << animalsByGroup.size() << " " << animals.size() << "\n";
+		//const std::vector<Animal> animals = Select::selectAnimals();
+        /*groupAnimalsCustom(animals);
         groupAnimalsRegex(animals);
         analyzeAnimalBirthdayCustom(animals);
         analyzeAnimalBirthdayRegex(animals);
         analyzeAnimalSexCustom(animals);
-        analyzeAnimalSexRegex(animals);
+        analyzeAnimalSexRegex(animals);*/
         Instrumentor::Get().EndSession();
 	}
 
@@ -205,4 +213,10 @@ void deleteAnimals()
 
     sqlite3_finalize(deleteStmt);
     sqlite3_close_v2(db);
+}
+
+void findAnimalInSet(const std::set<Animal>& animals, const Animal& animal)
+{
+    PROFILE_FUNCTION();
+    animals.find(animal);
 }
