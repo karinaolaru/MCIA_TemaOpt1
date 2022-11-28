@@ -5,7 +5,7 @@
 
 namespace BinarySearch
 {
-	std::optional<std::reference_wrapper<Animal>> iterative(std::vector<Animal>& animals, const std::string animalId) //TODO move sem
+	std::optional<std::reference_wrapper<Animal>> iterative(std::vector<Animal>& animals, const std::string animalId)
 	{
 		int left = 0, right = animals.size() - 1;
 		while (left <= right)
@@ -27,7 +27,7 @@ namespace BinarySearch
 		return std::nullopt;
 	}
 
-	std::optional<Animal&> recursive(std::vector<Animal>& animals, const std::string animalId, int left, int right) //TODO move sem
+	std::optional<Animal&> recursive(std::vector<Animal>& animals, const std::string animalId, int left, int right)
 	{
 		if (left > right)
 		{

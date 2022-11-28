@@ -10,6 +10,7 @@
 #include "Generate.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
+void deleteAnimalsVect(Select::Array& arr);
 void deleteAnimals();
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal>& animals);
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsRegex(const std::vector<Animal>& animals);
@@ -27,13 +28,17 @@ int main(int argc, const char* argv[])
 
 	{
         Instrumentor::Get().BeginSession("Profiling");
-		const std::vector<Animal> animals = Select::selectAnimals();
-        groupAnimalsCustom(animals);
+		Select::Array animals = Select::selectAnimals();
+		Select::Array animalsByGroup = Select::selectAllAnimalsByGroups();
+
+        deleteAnimalsVect(animals);
+        deleteAnimalsVect(animalsByGroup);
+        /*groupAnimalsCustom(animals);
         groupAnimalsRegex(animals);
         analyzeAnimalBirthdayCustom(animals);
         analyzeAnimalBirthdayRegex(animals);
         analyzeAnimalSexCustom(animals);
-        analyzeAnimalSexRegex(animals);
+        analyzeAnimalSexRegex(animals);*/
         Instrumentor::Get().EndSession();
 	}
 
@@ -41,6 +46,12 @@ int main(int argc, const char* argv[])
 		deleteAnimals();
 	}
     return 0;
+}
+
+void deleteAnimalsVect(Select::Array& arr)
+{
+    PROFILE_FUNCTION();
+    delete[] arr.first;
 }
 
 std::unordered_map<std::string, std::vector<Animal>> groupAnimalsCustom(const std::vector<Animal> &animals)
