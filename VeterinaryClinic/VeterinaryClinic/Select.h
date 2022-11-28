@@ -22,8 +22,7 @@ namespace Select
 	            uint32_t id;
 			    memcpy(&id, argv[0], 4);
 			    std::vector<Animal>& res = *static_cast<std::vector<Animal>*>(result);
-				Animal animal(id, argv[1], argv[2], argv[3]);
-			    res.emplace_back(std::move(animal));
+				res.emplace_back(id, argv[1], argv[2], argv[3]);
 			    return 0;
 	        }, &result, nullptr);
 

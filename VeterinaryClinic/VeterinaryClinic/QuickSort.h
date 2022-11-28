@@ -21,8 +21,11 @@ namespace QuickSort
         return (i + 1);
     }
 
+    static int callCount = 0;
+
     void recursiveSort(std::vector<Animal>& animals, int low, int high)
     {
+        callCount++;
         if (low < high) {
             int partIndex = partition(animals, low, high);
 

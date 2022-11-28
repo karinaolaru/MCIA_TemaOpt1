@@ -28,8 +28,11 @@ namespace BinarySearch
 		return std::nullopt;
 	}
 
+	static int callCount = 0;
+
 	std::optional<std::reference_wrapper<Animal>> recursiveSearch(std::vector<Animal>& animals, const std::string animalId, int left, int right) //TODO move sem
 	{
+		callCount++;
 		if (left > right)
 		{
 			return std::nullopt;
