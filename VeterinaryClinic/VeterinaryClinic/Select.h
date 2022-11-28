@@ -22,7 +22,8 @@ namespace Select
 	            uint32_t id;
 			    memcpy(&id, argv[0], 4);
 			    std::vector<Animal>& res = *static_cast<std::vector<Animal>*>(result);
-			    res.emplace_back(id, argv[1], argv[2], argv[3]);
+				Animal animal(id, argv[1], argv[2], argv[3]);
+			    res.emplace_back(std::move(animal));
 			    return 0;
 	        }, &result, nullptr);
 
@@ -34,7 +35,7 @@ namespace Select
 	{
 		sqlite3* db;
 		sqlite3_open("veterinary_clinic.db", &db);
-		const std::string selectQuery = "SELECT * FROM animals WHERE personal_id LIKE _" + std::to_string(animalTypeToInt(animalType)) + "%";
+		const std::string selectQuery = "SELECT * FROM animals WHERE personal_id LIKE '_" + std::to_string(animalTypeToInt(animalType)) + "%'";
 		std::vector<Animal> result;
 
 		sqlite3_exec(db, selectQuery.c_str(), [](void* result, int argc, char** argv, char** azColName)
@@ -53,6 +54,7 @@ namespace Select
 
 	std::vector<Animal> selectAllAnimalsByGroups() // todo move sem, test with just two vectors
 	{
+		PROFILE_FUNCTION();
 		std::vector<Animal> result;
 		std::vector<Animal> housePets = selectAnimalsByGroup(AnimalType::HousePet);
 		result.reserve(housePets.size()); // todo test without reserve

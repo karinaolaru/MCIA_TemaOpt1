@@ -39,7 +39,8 @@ namespace QuickSort
 
 	void iterative(std::vector<Animal>& animals)
 	{
-        int low = 0, high = animals.size() - 1;
+        PROFILE_FUNCTION();
+    	int low = 0, high = animals.size() - 1;
         int* stack = new int[high - low + 1];
         int top = -1;
 
@@ -67,6 +68,7 @@ namespace QuickSort
 
     void STL(std::vector<Animal>& animals)
     {
-        std::sort(animals.begin(), animals.end());
+        PROFILE_FUNCTION();
+    	std::sort(animals.begin(), animals.end());
     }
 }

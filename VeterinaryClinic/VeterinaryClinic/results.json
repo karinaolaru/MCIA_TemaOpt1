@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":590236,"name":"selectAnimals","ph":"X","pid":0,"tid":2390293191,"ts":1480277279468},{"cat":"function","dur":5501680,"name":"recursive","ph":"X","pid":0,"tid":2390293191,"ts":1480277869914}]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":747274,"name":"selectAnimals","ph":"X","pid":0,"tid":173216047,"ts":1484556596689}]}
