@@ -2,20 +2,23 @@
 
 #include "Animal.h"
 #include <optional>
+#include "Select.h"
 
 namespace BinarySearch
 {
-	std::optional<std::reference_wrapper<Animal>> iterative(std::vector<Animal>& animals, const std::string animalId)
+	std::optional<std::reference_wrapper<Animal>> iterative(Select::Array& animals, const std::string animalId)
 	{
-		int left = 0, right = animals.size() - 1;
+		PROFILE_FUNCTION();
+
+		int left = 0, right = animals.second - 1;
 		while (left <= right)
 		{
 			int mid = (left + right) / 2;
-			if (animals[mid].GetPersonalId() == animalId)
+			if (animals.first[mid].GetPersonalId() == animalId)
 			{
-				return { animals[mid] };
+				return { animals.first[mid] };
 			}
-			if (animals[mid].GetPersonalId() < animalId) 
+			if (animals.first[mid].GetPersonalId() < animalId) 
 			{
 				left = mid + 1;
 			}
@@ -27,21 +30,27 @@ namespace BinarySearch
 		return std::nullopt;
 	}
 
-	std::optional<Animal&> recursive(std::vector<Animal>& animals, const std::string animalId, int left, int right)
+	std::optional<std::reference_wrapper<Animal>> recursiveSearch(Select::Array& animals, const std::string animalId, int left, int right)
 	{
 		if (left > right)
 		{
-			return { std::nullopt };
+			return std::nullopt;
 		}
 		int mid = (left + right) / 2;
-		if (animals[mid].GetPersonalId() == animalId)
+		if (animals.first[mid].GetPersonalId() == animalId)
 		{
-			return std::optional<Animal&>(animals[mid]);
+			return { animals.first[mid] };
 		}
-		if (animals[mid].GetPersonalId() < animalId)
+		if (animals.first[mid].GetPersonalId() < animalId)
 		{
-			return BinarySearch::recursive(animals, animalId, mid + 1, right);
+			return BinarySearch::recursiveSearch(animals, animalId, mid + 1, right);
 		}
-		return BinarySearch::recursive(animals, animalId, left, mid - 1);
+		return BinarySearch::recursiveSearch(animals, animalId, left, mid - 1);
+	}
+
+	std::optional<std::reference_wrapper<Animal>> recursive(Select::Array& animals, const std::string animalId, int left, int right)
+	{
+		PROFILE_FUNCTION();
+		return recursiveSearch(animals, animalId, left, right);
 	}
 }

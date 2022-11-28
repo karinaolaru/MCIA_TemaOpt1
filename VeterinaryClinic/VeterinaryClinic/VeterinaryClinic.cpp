@@ -8,6 +8,8 @@
 #include "Instrumentor.h"
 #include "Select.h"
 #include "Generate.h"
+#include "QuickSort.h"
+#include "BinarySearch.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimalsVect(Select::Array& arr);
@@ -30,6 +32,15 @@ int main(int argc, const char* argv[])
         Instrumentor::Get().BeginSession("Profiling");
 		Select::Array animals = Select::selectAnimals();
 		Select::Array animalsByGroup = Select::selectAllAnimalsByGroups();
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> randAnimal(1, animals.second - 1);
+        Animal animal = animals.first[randAnimal(generator)];
+
+        QuickSort::iterative(animals);
+        
+        BinarySearch::iterative(animals, animal.GetPersonalId());
+        BinarySearch::recursive(animals, animal.GetPersonalId(), 0, animals.second - 1);
 
         deleteAnimalsVect(animals);
         deleteAnimalsVect(animalsByGroup);

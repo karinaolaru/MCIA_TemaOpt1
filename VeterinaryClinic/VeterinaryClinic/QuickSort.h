@@ -3,37 +3,45 @@
 #include <algorithm>
 #include <vector>
 #include "Animal.h"
+#include "Select.h"
 
 namespace QuickSort
 {
-    int partition(const std::vector<Animal>& animals, int low, int high)
+    int partition(Select::Array& animals, int low, int high)
     {
-        Animal pivot = animals[high];
+        Animal pivot = animals.first[high];
         int i = (low - 1);
 
         for (int j = low; j <= high - 1; j++) {
-            if (animals[j] < pivot) {
+            if (animals.first[j] < pivot) {
                 i++; 
-                std::swap(animals[i], animals[j]);
+                std::swap(animals.first[i], animals.first[j]);
             }
         }
-        std::swap(animals[i + 1], animals[high]);
+        std::swap(animals.first[i + 1], animals.first[high]);
         return (i + 1);
     }
 
-    void recursive(const std::vector<Animal>& animals, int low, int high)
+    void recursiveSort(Select::Array& animals, int low, int high)
     {
         if (low < high) {
             int partIndex = partition(animals, low, high);
 
-            recursive(animals, low, partIndex - 1);
-            recursive(animals, partIndex + 1, high);
+            recursiveSort(animals, low, partIndex - 1);
+            recursiveSort(animals, partIndex + 1, high);
         }
     }
 
-	void iterative(const std::vector<Animal>& animals)
+    void recursive(Select::Array& animals, int low, int high)
+    {
+        PROFILE_FUNCTION();
+        recursiveSort(animals, low, high);
+    }
+
+	void iterative(Select::Array& animals)
 	{
-        int low = 0, high = animals.size() - 1;
+        PROFILE_FUNCTION();
+        int low = 0, high = animals.second - 1;
         int* stack = new int[high - low + 1];
         int top = -1;
 
@@ -59,8 +67,9 @@ namespace QuickSort
         delete stack;
 	}
 
-    void STL(const std::vector<Animal>& animals)
+    void STL(Select::Array& animals)
     {
-        std::sort(animals.begin(), animals.end());
+        PROFILE_FUNCTION();
+        std::sort(animals.first, animals.first + animals.second);
     }
 }

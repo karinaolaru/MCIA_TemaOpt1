@@ -85,11 +85,11 @@ namespace Select
 		Array newArr = std::make_pair(new Animal[arr1.second + arr2.second], arr1.second + arr2.second);
 		for (size_t index = 0; index < arr1.second; ++index)
 		{
-			newArr.first[index] = std::move(arr1.first[index]);
+			newArr.first[index] = arr1.first[index];
 		}
 		for (size_t index = 0; index < arr2.second; ++index)
 		{
-			newArr.first[arr1.second + index] = std::move(arr2.first[index]);
+			newArr.first[arr1.second + index] = arr2.first[index];
 		}
 		delete[] arr1.first;
 		delete[] arr2.first;
@@ -98,6 +98,8 @@ namespace Select
 
 	Array selectAllAnimalsByGroups()
 	{
+		PROFILE_FUNCTION();
+
 		Array housePets = selectAnimalsByGroup(AnimalType::HousePet);
 		Array birds = selectAnimalsByGroup(AnimalType::Bird);
 		Array result = mergeArrays(housePets, birds);
