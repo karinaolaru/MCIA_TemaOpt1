@@ -6,7 +6,7 @@
 
 namespace QuickSort
 {
-    int partition(const std::vector<Animal>& animals, int low, int high)
+    int partition(std::vector<Animal>& animals, int low, int high)
     {
         Animal pivot = animals[high];
         int i = (low - 1);
@@ -17,21 +17,27 @@ namespace QuickSort
                 std::swap(animals[i], animals[j]);
             }
         }
-        std::swap(animals[i + 1], animals[high]);
+        std::swap(animals[i+1], animals[high]);
         return (i + 1);
     }
 
-    void recursive(const std::vector<Animal>& animals, int low, int high)
+    void recursiveSort(std::vector<Animal>& animals, int low, int high)
     {
         if (low < high) {
             int partIndex = partition(animals, low, high);
 
-            recursive(animals, low, partIndex - 1);
-            recursive(animals, partIndex + 1, high);
+            recursiveSort(animals, low, partIndex - 1);
+            recursiveSort(animals, partIndex + 1, high);
         }
     }
 
-	void iterative(const std::vector<Animal>& animals)
+    void recursive(std::vector<Animal>& animals, int low, int high)
+    {
+        PROFILE_FUNCTION();
+        recursiveSort(animals, low, high);
+    }
+
+	void iterative(std::vector<Animal>& animals)
 	{
         int low = 0, high = animals.size() - 1;
         int* stack = new int[high - low + 1];
@@ -59,7 +65,7 @@ namespace QuickSort
         delete stack;
 	}
 
-    void STL(const std::vector<Animal>& animals)
+    void STL(std::vector<Animal>& animals)
     {
         std::sort(animals.begin(), animals.end());
     }

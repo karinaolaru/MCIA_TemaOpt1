@@ -8,6 +8,7 @@
 #include "Instrumentor.h"
 #include "Select.h"
 #include "Generate.h"
+#include "QuickSort.h"
 
 void insertAnimals(const std::vector<Animal>& animals);
 void deleteAnimals();
@@ -27,13 +28,21 @@ int main(int argc, const char* argv[])
 
 	{
         Instrumentor::Get().BeginSession("Profiling");
-		const std::vector<Animal> animals = Select::selectAnimals();
-        groupAnimalsCustom(animals);
+		std::vector<Animal> animals = Select::selectAnimals();
+
+        QuickSort::recursive(animals, 0, animals.size() - 1);
+        for(int i=0;i<10;i++)
+        {
+            std::cout << animals[i] << std::endl;
+        }
+        
+        /*groupAnimalsCustom(animals);
         groupAnimalsRegex(animals);
         analyzeAnimalBirthdayCustom(animals);
         analyzeAnimalBirthdayRegex(animals);
         analyzeAnimalSexCustom(animals);
-        analyzeAnimalSexRegex(animals);
+        analyzeAnimalSexRegex(animals);*/
+
         Instrumentor::Get().EndSession();
 	}
 
